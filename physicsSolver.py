@@ -1,3 +1,4 @@
+#kaggle.com
 import math
 import time
 import mysql.connector# This is the error occuring
@@ -26,7 +27,7 @@ def feedback(user):
     mycursor.execute(string_feed,(user,data))
     mydb.commit()
     mydb.close()
-    thanks=f"{user},Thanks for your feedback!{'\n'}Our Team will make the changes soon.{'\n'}"
+    thanks=f"{user},Thank you for your feedback!{'\n'}Our Team will make the changes soon.{'\n'}"
     for i in range(len(thanks)):
         print(thanks[i],end='')
         time.sleep(0.01)
@@ -38,14 +39,14 @@ def solve_gravitation():
 def solve_magnetism():
     pass
 def solve_odm():
-    u=v=a=t=s=u1=s1=s2=None
+    u=v=a=t=s=u1=None
     result={}
     text=f"Enter the question : (Or type \\*/ to exit) {'\n'}"
     for i in range(len(text)):
         print(text[i],end='')
         time.sleep(0.01)
     question=str(input())
-    if question=='\*/':
+    if question=='\\*/':
         ending=f"Thanks For using our software! We hope to see you again soon.{'\n'}"
         for i in range(len(ending)):
             print(ending[i],end='')
@@ -57,11 +58,11 @@ def solve_odm():
     question=question.split()
     
     for i in range(len(question)):
-        if question[i] == 'm/s' and (question[i-3] == 'initial' or question[i-4]=='initial'):
+        if question[i] == 'm/s' and (question[i-3] == 'initial' or question[i-4]=='initial' or ((question[i-7]=='are' or question[i-7]=='were') and question[i-6]=='driving')):
             u=float(question[i-1])
         elif question[i]=="rest":
             u=0
-        if question[i]=='fall' or question[i]=='dropped' or question[i]=='drop':
+        if question[i]=='fall' or question[i]=='dropped' or question[i]=='drop' or question[i]=='drops':
             a=10
             u=0            # Setting up the variables
         elif question[i]=='m/s^2':
@@ -93,12 +94,13 @@ def solve_odm():
         if question[i]=='horizontally':
             u1=float(question[i+5])
             u=0
-            a=10 
+            a=10
+            
     data_got=f"The values we got are : v={v}  u={u}  a={a}  t={t}  s={s}  {'\n'}"
     for i in range(len(data_got)):
         print(data_got[i],end='')
         time.sleep(0.01)
-    if u is not None and v is not None and a is not None and t is None:
+    if u is not None and v is not None and a is not None and t is None and s is None:
         # Calculate time using the first equation of motion: v = u + at
         string=f"Now we are having initial velocity={u}, final velocity={v}, and, acceleration={a}{'\n'}Using these, we can find the time.{'\n'}Using the first equation of motion.{'\n'}Time = (Final Velocity - Initial Velocity) / Acceleration{'\n'}Time = ({v}-{u})/{a}{'\n'}Hence we get Time = {(v-u)/a}{'\n'}"
         for i in range(len(string)):
@@ -163,11 +165,11 @@ def solve_odm():
         result['acceleration'] = (v ** 2 - u ** 2) / (2 * s)
     if s is not None and u is not None and a is not None and t is None:
         # Calculate time using the second equation of motion:
-        string=f"Now we are given with Displacement = {s}, Initial Velocity = {u}, Acceleration = {a}{'\n'}Using these we can find the Time.{'\n'}Using Second Equation of Motion we have : {'\n'}Displacement = Initial Velocity * Time + Acceleration * (Time)^2{'\n'}So {s} = {u} * Time + 0.5 * {a} * (Time)^2{'\n'}Hence, Time = {(-2*u + math.sqrt(4*u*u + 8*a*s))/(2*a)}{'\n'}"
+        string=f"Now we are given with Displacement = {s}, Initial Velocity = {u}, Acceleration = {a}{'\n'}Using these we can find the Time.{'\n'}Using Second Equation of Motion we have : {'\n'}Displacement = Initial Velocity * Time + Acceleration * (Time)^2{'\n'}So {s} = {u} * Time + 0.5 * {a} * (Time)^2{'\n'}Hence, Time = {-(-2*u - math.sqrt(4*u*u + 8*a*s))/(2*a)} or Time = {-(-2*u + math.sqrt(4*u*u + 8*a*s))/(2*a)}{'\n'}"
         for i in range(len(string)):
             time.sleep(0.01)
             print(string[i],end='')
-        result['time'] = (-2*u + math.sqrt(4*u*u + 8*a*s))/(2*a)
+        result['time'] = (-((-2)*u - math.sqrt(4*u*u + 8*a*s))/(2*a),-(-2*u + math.sqrt(4*u*u + 8*a*s))/(2*a))
     if s is not None and u is not None and a is not None and v is None:
         #Calculate final velocity using the third equation of motion :
         string=f"Now we are given with Displacement = {s}, Initial Velocity = {u}, Acceleration = {a}{'\n'}Using these we can find the Final Velocity.{'\n'}Using Third Equation of Motion we have : (Final Velocity)^2 + (Initial Velocity)^2 = 2 * Acceleration * Displacement{'\n'}So, Final Velocity = square_root({u}^2 + 2 * {a} * {s}){'\n'}Hence, Final Velocity = {math.sqrt(u*u + 2*a*s)}{'\n'}"
@@ -196,42 +198,48 @@ def solve_odm():
 #4th Equation of motion is not added till now...
     return result   # returning the answer as a dictionary.
 
-# while True:
-option=f"Enter which subject question you want to solve : {'\n'}1. One Dimensional Motion{'\n'}2. Magnetism{'\n'}3. Energy{'\n'}4.Gravitation{'\n'}"
-for i in range(len(option)):
-    print(option[i],end='')
-    time.sleep(0.01)
-option=int(input())
-if(option==1):
-    result=solve_odm()
-elif(option==2):
-    result=solve_magnetism()
-elif(option==3):
-    result=solve_energy()
-elif(option==4):
-    result=solve_gravitation()
-else:
-    unknown=f"Please Enter something that I can recognize.{'\n'}"
-    for i in range(len(unknown)):
-        print(unknown[i],end='')
+while True:
+    option=f"Enter which subject question you want to solve : {'\n'}1. One Dimensional Motion{'\n'}2. Magnetism{'\n'}3. Energy{'\n'}4. Gravitation{'\n'}0. Exit{'\n'}"
+    for i in range(len(option)):
+        print(option[i],end='')
         time.sleep(0.01)
-string_main=f"The result is :{'\n'}{result}{'\n'}"
-for i in range(len(string_main)):
+    option=int(input())
+    if(option==0):
+        ending=f"Thank you for using our interface.{'\n'}"
+        for i in range(len(ending)):
+            print(ending[i],end='')
             time.sleep(0.01)
-            print(string_main[i],end='')
-feed_text=f"Was the answer correct : {'\n'}"
-for i in range(len(feed_text)):
-    time.sleep(0.01)
-    print(feed_text[i],end='')
-feed=str(input()).strip().lower()
-if(feed=='yes'):
-    feed_positive=f"Let's Proceed on the next question then!{'\n'}"
-    for i in range(len(feed_positive)):
-        print(feed_positive[i],end="")
+        exit()
+    elif(option==1):
+        result=solve_odm()
+    elif(option==2):
+        result=solve_magnetism()
+    elif(option==3):
+        result=solve_energy()
+    elif(option==4):
+        result=solve_gravitation()
+    else:
+        unknown=f"Please Enter something that I can recognize.{'\n'}"
+        for i in range(len(unknown)):
+            print(unknown[i],end='')
+            time.sleep(0.01)
+    string_main=f"The result is :{'\n'}{result}{'\n'}"
+    for i in range(len(string_main)):
+                time.sleep(0.01)
+                print(string_main[i],end='')
+    feed_text=f"Was the answer correct : {'\n'}"
+    for i in range(len(feed_text)):
         time.sleep(0.01)
-elif(feed=='no'):
-    feed_negative=f"Please Give us your feedback.{'\n'}"
-    for i in range(len(feed_negative)):
-        print(feed_negative[i],end='')
-        time.sleep(0.01)
-    feedback(user)
+        print(feed_text[i],end='')
+    feed=str(input()).strip().lower()
+    if(feed=='yes'):
+        feed_positive=f"Let's Proceed on the next question then!{'\n'}"
+        for i in range(len(feed_positive)):
+            print(feed_positive[i],end="")
+            time.sleep(0.01)
+    elif(feed=='no'):
+        feed_negative=f"Please Give us your feedback.{'\n'}"
+        for i in range(len(feed_negative)):
+            print(feed_negative[i],end='')
+            time.sleep(0.01)
+        feedback(user)
